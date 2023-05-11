@@ -16,16 +16,10 @@ public class BalanceFragment extends Fragment {
 
     private FragmentBalanceBinding binding;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        BalanceViewModel balanceViewModel =
-                new ViewModelProvider(this).get(BalanceViewModel.class);
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentBalanceBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textBalance;
-        balanceViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
