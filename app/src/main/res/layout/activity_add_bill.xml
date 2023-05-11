@@ -50,7 +50,7 @@
         android:layout_below="@+id/tv_split_mode" >
 
         <ToggleButton
-            android:id="@+id/toggle_evenly"
+            android:id="@+id/tb_evenly"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -58,17 +58,20 @@
             android:textOff="Evenly"
             android:textOn="Evenly"
             android:textSize="14sp"
+            android:background="@drawable/active_toggle_button_background_with_border"
             android:checked="true" />
 
         <ToggleButton
-            android:id="@+id/toggle_individually"
+            android:id="@+id/tb_individually"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Individually"
             android:textOff="Individually"
             android:textOn="Individually"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:background="@color/gray"
+            android:checked="false"/>
 
     </LinearLayout>
 
