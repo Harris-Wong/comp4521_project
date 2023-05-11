@@ -57,9 +57,9 @@ public class AddBillActivity extends AppCompatActivity {
 
                 String splitMode = tbEvenly.isChecked() ? "Evenly" : "Individually";
 
-                Toast.makeText(getApplicationContext(), splitMode, Toast.LENGTH_SHORT).show(); // display the current state of toggle button's
 
-                // Back to Home Activity
+                // Print success message and Back to Home Activity
+                Toast.makeText(getApplicationContext(), "Bill successfully created", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
