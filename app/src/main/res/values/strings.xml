@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Bill Splitter</string>
+    <string name="title_activity_login">Login Activity</string>
+    <string name="title_activity_register">Register Activity</string>
+    <string name="title_activity_home">Home Activity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="title_balance">Balance</string>
+    <string name="title_statistics">Statistics</string>
+    <string name="title_settings">Settings</string>
+</resources>
