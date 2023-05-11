@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final String DBNAME = "Login.db";
+    public static final String DBNAME = "storage.db";
 
     public DBHelper(Context context) {
         super(context, DBHelper.DBNAME, null, 1);
@@ -16,13 +16,16 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create Table users(username TEXT primary key, password TEXT)");
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("create Table users(id INTEGER primary key, username TEXT, password TEXT, friends TEXT)");
+        db.execSQL("create Table bills(id INTEGER primary key, data TEXT)");
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("drop Table if exists users");
+    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+        db.execSQL("drop Table if exists users");
+        db.execSQL("drop Table if exists bills");
+        onCreate(db);
     }
 
     public Boolean insertData(String username, String password) {
