@@ -83,6 +83,7 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("log", "Logout clicked");
                 ((MyApplication) getActivity().getApplication()).getUser().setUsername("");
+                Toast.makeText(getContext(), "Logged out", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             }
         });
