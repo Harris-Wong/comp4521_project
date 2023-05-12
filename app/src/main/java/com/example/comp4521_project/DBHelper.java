@@ -47,19 +47,25 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT friends FROM users WHERE username=?", new String[]{username});
         if (cursor.moveToFirst()) {
             String friendsJSON = cursor.getString(0);
-            try {
-                JSONArray friendsArray = new JSONArray(friendsJSON);
-                String[] friends = new String[friendsArray.length()];
-                for (int i = 0; i < friendsArray.length(); i++) {
-                    friends[i] = friendsArray.getString(i);
+            if (friendsJSON != null) {
+                try {
+                    JSONArray friendsArray = new JSONArray(friendsJSON);
+                    String[] friends = new String[friendsArray.length()];
+                    for (int i = 0; i < friendsArray.length(); i++) {
+                        friends[i] = friendsArray.getString(i);
+                    }
+                    return friends;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return new String[0];
                 }
-                return friends;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return new String[0];
             }
         }
         return new String[0];
+    }
+
+    public Integer countFriends(String username) {
+        return getFriends(username).length;
     }
 
     public Boolean updateFriends(String username, String[] friends) {

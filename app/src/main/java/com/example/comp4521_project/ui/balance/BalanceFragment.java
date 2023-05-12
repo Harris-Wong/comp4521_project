@@ -14,25 +14,36 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.comp4521_project.AddBillActivity;
 import com.example.comp4521_project.ManageFriendsActivity;
+import com.example.comp4521_project.MyApplication;
 import com.example.comp4521_project.R;
 import com.example.comp4521_project.RegisterActivity;
 import com.example.comp4521_project.databinding.FragmentBalanceBinding;
+
+import org.w3c.dom.Text;
 
 public class BalanceFragment extends Fragment {
 
     private FragmentBalanceBinding binding;
 
     Button btnManageFriends, btnAddBill;
+    TextView tv_friends_number;
+
+    MyApplication myApplication;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentBalanceBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        myApplication = (MyApplication) requireActivity().getApplication();
+
         String title = getActivity().getString(R.string.title_balance);
         getActivity().setTitle(title);
 
+
         btnManageFriends = (Button) root.findViewById(R.id.btn_manage_friends);
         btnAddBill = (Button) root.findViewById(R.id.btn_add_bill);
-
+        tv_friends_number = (TextView) root.findViewById(R.id.tv_friends_number);
+        tv_friends_number.setText(myApplication.getDB().countFriends(myApplication.getUser().getUsername()).toString());
         btnManageFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

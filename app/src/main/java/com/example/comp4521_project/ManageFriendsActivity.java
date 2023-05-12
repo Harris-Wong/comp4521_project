@@ -10,6 +10,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class ManageFriendsActivity extends AppCompatActivity {
 
     EditText etFriendName;
@@ -31,14 +35,19 @@ public class ManageFriendsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String newFriend = etFriendName.getText().toString();
+                if (newFriend.length() == 0) {
+                    Toast.makeText(getApplicationContext(),  "Friend's name can't be empty. ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (DB.isUserExisted(newFriend)) {
                     String [] friendList = DB.getFriends(username);
-                    String[] newFriendList = new String[friendList.length + 1];
-                    System.arraycopy(friendList, 0, newFriendList, 0, friendList.length);
-                    newFriendList[newFriendList.length - 1] = newFriend;
-                    DB.updateFriends(username, newFriendList);
+                    Set<String> uniqueFriends = new HashSet<>(Arrays.asList(friendList));
+                    uniqueFriends.add(newFriend);
+                    DB.updateFriends(username, uniqueFriends.toArray(new String[uniqueFriends.size()]));
+                    etFriendName.setText("");
+                    Toast.makeText(getApplicationContext(),  newFriend + " is added. ", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Friend " + newFriend + " doesn't exist. ", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Friend " + newFriend + " doesn't exist. ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
