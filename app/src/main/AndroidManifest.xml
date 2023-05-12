@@ -12,6 +12,16 @@
         android:theme="@style/Theme.Comp4521_project"
         tools:targetApi="31">
         <activity
+            android:name=".AddBillActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_bill"
+            android:parentActivityName=".HomeActivity"/>
+        <activity
+            android:name=".ManageFriendsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_manage_friends"
+            android:parentActivityName=".HomeActivity" />
+        <activity
             android:name=".HomeActivity"
             android:exported="false"
             android:label="@string/title_activity_home" />
@@ -19,7 +29,7 @@
             android:name=".RegisterActivity"
             android:exported="false"
             android:label="@string/title_activity_register"
-            android:theme="@style/Theme.Comp4521_project.NoActionBar" />
+            android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".LoginActivity"
             android:exported="true"

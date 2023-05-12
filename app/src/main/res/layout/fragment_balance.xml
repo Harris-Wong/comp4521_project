@@ -8,23 +8,15 @@
     android:orientation="vertical"
     tools:context=".ui.balance.BalanceFragment">
 
-    <TextView
-        android:id="@+id/text_balance"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="20sp" />
-
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
-        android:id="@+id/linear_layout_container"
+        android:id="@+id/ll_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/friends_linear_layout"
+            android:id="@+id/ll_friends"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -32,7 +24,7 @@
             android:gravity="center_vertical">
 
             <TextView
-                android:id="@+id/friends"
+                android:id="@+id/tv_friends"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
@@ -45,7 +37,7 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/friendsnumber"
+                android:id="@+id/tv_friends_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
@@ -58,27 +50,27 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/btnnewfriend"
+                android:id="@+id/btn_manage_friends"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:padding="10dp"
                 android:textColor="@color/black"
                 android:backgroundTint="#C8C8C8"
-                android:onClick="addFriend"
-                android:text="Add new friend" />
+                android:onClick="manageFriends"
+                android:text="Manage Friends" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/balance_linear_layout"
+            android:id="@+id/ll_balance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/balance"
+                android:id="@+id/tv_balance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
@@ -87,7 +79,7 @@
                 android:text="Balance" />
 
             <TextView
-                android:id="@+id/balance_sentence"
+                android:id="@+id/tv_balance_sentence"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
@@ -96,22 +88,20 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/bills_related_linear_layout"
+            android:id="@+id/ll_bills"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/bills_linear_layout"
+                android:id="@+id/ll_bills_control"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
                 android:gravity="center_vertical">
 
                 <TextView
-                    android:id="@+id/bills"
+                    android:id="@+id/tv_bills"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
@@ -125,27 +115,18 @@
                     android:layout_weight="1" />
 
                 <Button
-                    android:id="@+id/new_bill"
+                    android:id="@+id/btn_add_bill"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:backgroundTint="#C8C8C8"
-                    android:text="Add new bill" />
-
+                    android:text="New bill" />
 
             </LinearLayout>
 
-            <!--            <TableLayout-->
-            <!--                android:id="@+id/table_layout"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:padding="16dp">-->
-
-            <!--                &lt;!&ndash; content for the table layout &ndash;&gt;-->
-
-            <!--            </TableLayout>-->
+<!--       Todo: <Recycler View> Show Bills' List-->
 
         </LinearLayout>
 

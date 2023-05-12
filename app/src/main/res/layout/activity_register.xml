@@ -9,6 +9,7 @@
     android:layout_marginRight="30dp"
     tools:context=".RegisterActivity" >
 
+
     <TextView
         android:id="@+id/tv_register"
         android:layout_width="wrap_content"
