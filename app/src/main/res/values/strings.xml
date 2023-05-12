@@ -10,4 +10,13 @@
     <string name="title_balance">Balance</string>
     <string name="title_statistics">Statistics</string>
     <string name="title_settings">Settings</string>
-</resources>
+
+    <string name="text_currency">Currency</string>
+    
+    <string-array name="currencies_array">
+        <item>HKD</item>
+        <item>USD</item>
+        <item>JPY</item>
+        <item>CNY</item>
+    </string-array>
+</resources>    
