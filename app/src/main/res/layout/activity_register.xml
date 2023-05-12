@@ -72,7 +72,8 @@
         android:textColor="#000000"
         android:textSize="14sp"
         android:background="#E0E0E0"
-        android:layout_below="@+id/tv_password" />
+        android:layout_below="@+id/tv_password"
+        android:inputType="textPassword" />
 
     <TextView
         android:id="@+id/tv_repassword"
@@ -94,7 +95,8 @@
         android:textColor="#000000"
         android:textSize="14sp"
         android:background="#E0E0E0"
-        android:layout_below="@+id/tv_repassword" />
+        android:layout_below="@+id/tv_repassword"
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/btn_create_account"

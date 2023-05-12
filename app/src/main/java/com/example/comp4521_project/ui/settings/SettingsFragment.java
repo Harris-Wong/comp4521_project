@@ -63,7 +63,7 @@ public class SettingsFragment extends Fragment {
                 SharedPreferences.Editor editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
                 editor.putString(getString(R.string.text_currency), selectedCurrency);
                 editor.apply();
-//                Toast.makeText(getContext(), "Currency set to " + selectedCurrency, Toast.LENGTH_LONG).show();
+//                Toast.makeText(getContext(), "Currency set to " + selectedCurrency, Toast.LENGTH_SHORT).show();
                 Log.d("log", selectedCurrency);
             }
 
