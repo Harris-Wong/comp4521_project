@@ -27,6 +27,8 @@ public class BalanceFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentBalanceBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        String title = getActivity().getString(R.string.title_balance);
+        getActivity().setTitle(title);
 
         btnManageFriends = (Button) root.findViewById(R.id.btn_manage_friends);
         btnAddBill = (Button) root.findViewById(R.id.btn_add_bill);

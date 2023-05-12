@@ -58,7 +58,7 @@
                 android:textColor="@color/black"
                 android:backgroundTint="#C8C8C8"
                 android:onClick="manageFriends"
-                android:text="Manage Friends" />
+                android:text="Manage" />
 
         </LinearLayout>
 

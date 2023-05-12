@@ -30,6 +30,9 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        String title = getActivity().getString(R.string.title_settings);
+        getActivity().setTitle(title);
+
         Spinner spinner = (Spinner) getView().findViewById(R.id.currencySpinner);
         System.out.println(spinner == null ? "Is null" : "not null");
 
