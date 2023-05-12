@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.et_password);
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnRegister = (Button) findViewById(R.id.btn_register);
-        DB = new DBHelper(this);
+        DB = ((MyApplication) getApplication()).getDB();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

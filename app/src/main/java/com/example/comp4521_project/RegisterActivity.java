@@ -23,7 +23,7 @@ public class RegisterActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.et_password);
         etRepassword = (EditText) findViewById(R.id.et_repassword);
         btnCreateAccount = (Button) findViewById(R.id.btn_create_account);
-        DB = new DBHelper(this);
+        DB = ((MyApplication) getApplication()).getDB();
 
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
