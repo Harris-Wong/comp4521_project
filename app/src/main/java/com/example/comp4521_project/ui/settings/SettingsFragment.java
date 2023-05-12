@@ -41,7 +41,7 @@ public class SettingsFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
         String currentCurrency = sharedPref.getString(getString(R.string.text_currency), "");
         switch (currentCurrency) {
             case "HKD":
@@ -64,7 +64,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedCurrency = (String) parent.getItemAtPosition(position);
-                SharedPreferences.Editor editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
+                SharedPreferences.Editor editor = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE).edit();
                 editor.putString(getString(R.string.text_currency), selectedCurrency);
                 editor.apply();
 //                Toast.makeText(getContext(), "Currency set to " + selectedCurrency, Toast.LENGTH_SHORT).show();
