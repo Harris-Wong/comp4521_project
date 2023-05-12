@@ -28,19 +28,16 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public Boolean insertData(String username, String password) {
+    public Boolean insertUser(String username, String password) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("username", username);
         contentValues.put("password", password);
         long result = sqLiteDatabase.insert("users", null, contentValues);
-        if(result==-1)
-            return false;
-        else
-            return true;
+        return result != -1;
     }
 
-    public Boolean checkusername(String username) {
+    public Boolean isUserExisted(String username) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("Select * from users where username = ?", new String[]{username});
         if (cursor.getCount() > 0)
@@ -49,7 +46,7 @@ public class DBHelper extends SQLiteOpenHelper {
             return false;
     }
 
-    public Boolean checkusernamepassword(String username, String password) {
+    public Boolean isCredentialsMatched(String username, String password) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("Select * from users where username = ? and password = ?", new String[]{username, password});
         if (cursor.getCount() > 0)

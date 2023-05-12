@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.comp4521_project.MyApplication;
 import com.example.comp4521_project.R;
 import com.example.comp4521_project.databinding.FragmentSettingsBinding;
 
@@ -81,6 +82,8 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("log", "Logout clicked");
+                ((MyApplication) getActivity().getApplication()).getUser().setUsername("");
+                getActivity().finish();
             }
         });
     }

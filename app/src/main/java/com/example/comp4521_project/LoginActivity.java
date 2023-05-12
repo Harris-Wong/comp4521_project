@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (user.equals("") || pass.equals(""))
                     Toast.makeText(LoginActivity.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();
                 else {
-                    Boolean isValid = DB.checkusernamepassword(user, pass);
+                    Boolean isValid = DB.isCredentialsMatched(user, pass);
                     if (isValid == true) {
                         ((MyApplication) getApplication()).getUser().setUsername(user);
                         Toast.makeText(LoginActivity.this, "Sign in successfully", Toast.LENGTH_SHORT).show();
