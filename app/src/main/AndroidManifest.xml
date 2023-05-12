@@ -4,6 +4,7 @@
     package="com.example.myapp">
 
     <application
+        android:name="com.example.comp4521_project.MyApplication"
         android:allowBackup="true"
         android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher"

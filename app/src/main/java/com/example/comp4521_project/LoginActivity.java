@@ -37,15 +37,16 @@ public class LoginActivity extends AppCompatActivity {
                 String user = etUsername.getText().toString();
                 String pass = etPassword.getText().toString();
 
-                if(user.equals("")||pass.equals(""))
+                if (user.equals("") || pass.equals(""))
                     Toast.makeText(LoginActivity.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();
                 else {
-                    Boolean checkUserPass = DB.checkusernamepassword(user, pass);
-                    if (checkUserPass==true) {
+                    Boolean isValid = DB.checkusernamepassword(user, pass);
+                    if (isValid == true) {
+                        ((MyApplication) getApplication()).getUser().setUsername(user);
                         Toast.makeText(LoginActivity.this, "Sign in successfully", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                         startActivity(intent);
-                    }else{
+                    } else {
                         Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
                     }
                 }

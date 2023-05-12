@@ -39,18 +39,19 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();
                 else{
                     if(pass.equals(repass)) {
-                        Boolean checkUser = DB.checkusername(user);
-                        if(checkUser==false) {
-                            Boolean insert = DB.insertData(user, pass);
-                            if(insert==true) {
+                        Boolean isUserExisted = DB.checkusername(user);
+                        if(isUserExisted) {
+                            Toast.makeText(RegisterActivity.this, "User already exists! please sign in", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Boolean isInsertSuccess = DB.insertData(user, pass);
+                            if(isInsertSuccess) {
                                 Toast.makeText(RegisterActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                                startActivity(intent);
+//                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+//                                startActivity(intent);
+                                finish();
                             } else {
                                 Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            Toast.makeText(RegisterActivity.this, "User already exists! please sign in", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(RegisterActivity.this, "Passwords not matching", Toast.LENGTH_SHORT).show();
