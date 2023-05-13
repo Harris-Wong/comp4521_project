@@ -2,6 +2,7 @@ package com.example.comp4521_project;
 
 import com.google.gson.Gson;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 
@@ -77,6 +78,22 @@ public class Bill {
             }
         }
         return 0.0;
+    }
+
+    public String[] getPeople() {
+        return debt.keySet().toArray(new String[debt.keySet().size()]);
+    }
+
+    public String historyFrom(Instant now, Instant before) {
+        Duration duration = Duration.between(before, now);
+        long hours = duration.toHours();
+
+        if (hours < 24) {
+            return String.valueOf(hours) + "h ago";
+        } else {
+            long days = hours / 24;
+            return days + "d ago";
+        }
     }
 
     public String toJson() {
