@@ -31,10 +31,10 @@ public class BillAdapter extends RecyclerView.Adapter<BillViewHolder> {
     public void onBindViewHolder(@NonNull BillViewHolder holder, int position) {
         holder.title.setText(items.get(position).getTitle());
         holder.people.setText(items.get(position).getPeople());
-        holder.splitMode.setText(items.get(position).getSplitMode());
+        holder.splitMode.setText(items.get(position).getMode());
         holder.total.setText(items.get(position).getTotal());
         holder.paidBy.setText(items.get(position).getPaidBy());
-        holder.howLongAgo.setText(items.get(position).getHowLongAgo());
+        holder.howLongAgo.setText(items.get(position).getHistory());
     }
 
     @Override

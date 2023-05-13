@@ -4,18 +4,18 @@ public class BillItem {
 
     String title;
     String people;
-    String splitMode;
+    String mode;
     String total;
     String paidBy;
-    String howLongAgo;
+    String history;
 
-    public BillItem(String title, String people, String splitMode, String total, String paidBy, String howLongAgo) {
+    public BillItem(String title, String people, String mode, String total, String paidBy, String history) {
         this.title = title;
         this.people = people;
-        this.splitMode = splitMode;
+        this.mode = mode;
         this.total = total;
         this.paidBy = paidBy;
-        this.howLongAgo = howLongAgo;
+        this.history = history;
     }
 
     public String getTitle() {
@@ -34,12 +34,12 @@ public class BillItem {
         this.people = people;
     }
 
-    public String getSplitMode() {
-        return splitMode;
+    public String getMode() {
+        return mode;
     }
 
-    public void setSplitMode(String splitMode) {
-        this.splitMode = splitMode;
+    public void setMode(String mode) {
+        this.mode = mode;
     }
 
     public String getTotal() {
@@ -58,11 +58,11 @@ public class BillItem {
         this.paidBy = paidBy;
     }
 
-    public String getHowLongAgo() {
-        return howLongAgo;
+    public String getHistory() {
+        return history;
     }
 
-    public void setHowLongAgo(String howLongAgo) {
-        this.howLongAgo = howLongAgo;
+    public void setHistory(String history) {
+        this.history = history;
     }
 }
