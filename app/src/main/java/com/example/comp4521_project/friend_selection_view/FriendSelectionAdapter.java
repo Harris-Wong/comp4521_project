@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 
 import com.example.comp4521_project.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FriendSelectionAdapter extends ArrayAdapter<String> {
@@ -58,9 +59,14 @@ public class FriendSelectionAdapter extends ArrayAdapter<String> {
         return view;
     }
 
-    public void updateItems(List<String> newItems) {
-        items.clear();
-        items.addAll(newItems);
-        notifyDataSetChanged();
+    public List<FriendSelectionItem> getFriendSelectionItems() {
+        List<FriendSelectionItem> friendSelectionItems = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            String friend = items.get(i);
+            EditText etDebt = (EditText) getView(i, null, null).findViewById(R.id.et_debt);
+            String debt = etDebt.getText().toString();
+            friendSelectionItems.add(new FriendSelectionItem(friend, debt));
+        }
+        return friendSelectionItems;
     }
 }

@@ -67,12 +67,12 @@ public class ManageFriendsActivity extends AppCompatActivity {
                     uniqueFriends.add(newFriend);
                     DB.updateFriends(username, uniqueFriends.toArray(new String[uniqueFriends.size()]));
                     etFriendName.setText("");
-                    Toast.makeText(getApplicationContext(), newFriend + " is added. ", Toast.LENGTH_SHORT).show();
 
                     // Add the new friend to the list and update the adapter
                     FriendItem newFriendItem = new FriendItem(newFriend, "No debts");
                     friends.add(newFriendItem);
                     adapter.notifyDataSetChanged();
+                    Toast.makeText(getApplicationContext(), newFriend + " is added. ", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "Friend " + newFriend + " doesn't exist. ", Toast.LENGTH_SHORT).show();
                 }
