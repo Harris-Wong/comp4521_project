@@ -78,26 +78,41 @@ public class ManageFriendsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String newFriend = etFriendName.getText().toString();
+                if (newFriend.equals(username)) {
+                    Toast.makeText(getApplicationContext(), "Can't add yourself as your friend. ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (newFriend.length() == 0) {
                     Toast.makeText(getApplicationContext(), "Friend's name can't be empty. ", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (DB.isUserExisted(newFriend)) {
-                    String [] friendList = DB.getFriends(username);
-                    Set<String> uniqueFriends = new HashSet<>(Arrays.asList(friendList));
+                    String [] friends = DB.getFriends(username);
+                    Set<String> uniqueFriends = new HashSet<>(Arrays.asList(friends));
                     uniqueFriends.add(newFriend);
                     DB.updateFriends(username, uniqueFriends.toArray(new String[uniqueFriends.size()]));
                     etFriendName.setText("");
 
+
+
                     // Add the new friend to the list and update the adapter
                     FriendItem newFriendItem = new FriendItem(newFriend, "Settled " + currency + "0.0");
-                    ManageFriendsActivity.this.friendList.add(newFriendItem);
+                    Boolean isFriendExisted = false;
+                    for (FriendItem friendItem : friendList) {
+                        if (friendItem.getFriendName().equals(newFriendItem.getFriendName())) {
+                            isFriendExisted = true;
+                        }
+                    }
+                    if (!isFriendExisted) {
+                        ManageFriendsActivity.this.friendList.add(newFriendItem);
+                        Toast.makeText(getApplicationContext(), newFriend + " is added. ", Toast.LENGTH_SHORT).show();
+                    }
                     adapter.notifyDataSetChanged();
 
                     ((TextView) findViewById(R.id.tv_manage_friend_count)).setText(String.valueOf(DB.getFriends(username).length));
-                    Toast.makeText(getApplicationContext(), newFriend + " is added. ", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Friend " + newFriend + " doesn't exist. ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "User " + newFriend + " doesn't exist. ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
