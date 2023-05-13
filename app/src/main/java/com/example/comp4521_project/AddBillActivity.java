@@ -1,14 +1,18 @@
 package com.example.comp4521_project;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,6 +28,7 @@ import android.widget.ToggleButton;
 import com.example.comp4521_project.friend_list_view.FriendAdapter;
 import com.example.comp4521_project.friend_list_view.FriendItem;
 import com.example.comp4521_project.friend_selection_view.FriendSelectionAdapter;
+import com.example.comp4521_project.friend_selection_view.FriendSelectionItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +59,8 @@ public class AddBillActivity extends AppCompatActivity {
         tbEvenly = (ToggleButton) findViewById(R.id.tb_evenly);
         tbIndividually = (ToggleButton) findViewById(R.id.tb_individually);
 
-        List<String> items = Arrays.asList("Item 1", "Item 2", "Item 3", "Item 4", "Item 5");
+//        List<String> items = Arrays.asList("Item 1", "Item 2", "Item 3", "Item 4", "Item 5");
+        List<String> items = new ArrayList<>();
 
         adapter = new FriendSelectionAdapter(this, items);
         listView = findViewById(R.id.friend_selection_view);
@@ -82,26 +88,9 @@ public class AddBillActivity extends AppCompatActivity {
             }
         });
 
-        btnCreateBill.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Todo: Check whether all view is filled + Add Bill info to Bill Table in database
-
-                String splitMode = tbEvenly.isChecked() ? "Evenly" : "Individually";
-
-
-                // Print success message and Back to Home Activity
-                Toast.makeText(getApplicationContext(), "Bill successfully created", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
-
-
         dpFriendSelection = findViewById(R.id.dp_friend_selection);
-
         // initialize selected friend array
         selectedFriend = new boolean[friendArray.length];
-
         dpFriendSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,13 +105,13 @@ public class AddBillActivity extends AppCompatActivity {
                         // check condition
                         if (checked) {
                             // when checkbox selected
-                            // Add position  in lang list
+                            // Add position  in friend list
                             friendList.add(pos);
                             // Sort array list
                             Collections.sort(friendList);
                         } else {
                             // when checkbox unselected
-                            // Remove position from langList
+                            // Remove position from friendList
                             friendList.remove(Integer.valueOf(pos));
                         }
                     }
@@ -132,11 +121,15 @@ public class AddBillActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         try {
+                            items.clear();
+
                             StringBuilder stringBuilder = new StringBuilder();
 
                             for (int j = 0; j < friendList.size(); j++) {
                                 // concat array value
                                 stringBuilder.append(friendArray[friendList.get(j)]);
+                                items.add(friendArray[friendList.get(j)]);
+
                                 // check condition
                                 if (j != friendList.size() - 1) {
                                     // When j value  not equal
@@ -146,10 +139,9 @@ public class AddBillActivity extends AppCompatActivity {
                                 }
                             }
                             // set text on textView
-                            dpFriendSelection.setText(stringBuilder.toString());
+//                            dpFriendSelection.setText(stringBuilder.toString());
 
-                            List<String> newItems = Arrays.asList("NewItem1", "NewItem2", "NewItem3");
-                            adapter.updateItems(newItems);
+                            adapter.notifyDataSetChanged();
 
                         } catch (Exception e) {
                             Log.e("AddBillActivity", "Error in onClick(): " + e.getMessage());
@@ -175,10 +167,37 @@ public class AddBillActivity extends AppCompatActivity {
                             // clear text view value
                             dpFriendSelection.setText("");
                         }
+
+                        items.clear();
+                        adapter.notifyDataSetChanged();
                     }
                 });
                 // show dialog
                 builder.show();
+            }
+        });
+
+        btnCreateBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Todo: Check whether all view is filled + Add Bill info to Bill Table in database
+
+                String splitMode = tbEvenly.isChecked() ? "Evenly" : "Individually";
+
+                List<String[]> friendInfolist = new ArrayList<>();
+
+                List<FriendSelectionItem> friendSelectionItems = adapter.getFriendSelectionItems();
+                for (FriendSelectionItem friendSelectionItem : friendSelectionItems) {
+                    String friend = friendSelectionItem.getFriend();
+                    String debt = friendSelectionItem.getDebt();
+                    friendInfolist.add(new String[]{friend, debt});
+                }
+                Log.i("Add Bill", Arrays.deepToString(friendInfolist.toArray()));
+
+
+                // Print success message and Back to Home Activity
+                Toast.makeText(getApplicationContext(), "Bill successfully created", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }

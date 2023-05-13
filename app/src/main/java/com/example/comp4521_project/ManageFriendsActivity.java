@@ -88,13 +88,14 @@ public class ManageFriendsActivity extends AppCompatActivity {
                     uniqueFriends.add(newFriend);
                     DB.updateFriends(username, uniqueFriends.toArray(new String[uniqueFriends.size()]));
                     etFriendName.setText("");
-                    Toast.makeText(getApplicationContext(), newFriend + " is added. ", Toast.LENGTH_SHORT).show();
 
                     // Add the new friend to the list and update the adapter
                     FriendItem newFriendItem = new FriendItem(newFriend, "Settled " + currency + "0.0");
                     ManageFriendsActivity.this.friendList.add(newFriendItem);
                     adapter.notifyDataSetChanged();
+
                     ((TextView) findViewById(R.id.tv_manage_friend_count)).setText(String.valueOf(DB.getFriends(username).length));
+                    Toast.makeText(getApplicationContext(), newFriend + " is added. ", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "Friend " + newFriend + " doesn't exist. ", Toast.LENGTH_SHORT).show();
                 }
