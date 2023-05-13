@@ -6,9 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -76,6 +79,25 @@ public class DBHelper extends SQLiteOpenHelper {
         return rowsAffected > 0;
     }
 
+    public Bill[] getBills() {
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {"data"};
+        Cursor cursor = db.query("bills", projection, null, null, null, null, null);
+
+        ArrayList<Bill> billsList = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            String json = cursor.getString(cursor.getColumnIndexOrThrow("data"));
+            Gson gson = new Gson();
+            Bill bill = gson.fromJson(json, Bill.class);
+            billsList.add(bill);
+        }
+        cursor.close();
+
+        Bill[] billsArray = new Bill[billsList.size()];
+        billsList.toArray(billsArray);
+
+        return billsArray;
+    }
     public Boolean insertBill(String data) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -91,6 +113,8 @@ public class DBHelper extends SQLiteOpenHelper {
         int rowsAffected = db.update("bills", values, "id=?", new String[]{Integer.toString(id)});
         return rowsAffected > 0;
     }
+
+
 
     public Boolean isUserExisted(String username) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();

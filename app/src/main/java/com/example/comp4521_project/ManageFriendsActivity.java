@@ -1,16 +1,17 @@
 package com.example.comp4521_project;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.comp4521_project.DBHelper;
-import com.example.comp4521_project.MyApplication;
 import com.example.comp4521_project.friend_list_view.FriendAdapter;
 import com.example.comp4521_project.friend_list_view.FriendItem;
 
@@ -23,12 +24,14 @@ import java.util.Set;
 public class ManageFriendsActivity extends AppCompatActivity {
 
     EditText etFriendName;
+    TextView tvManageFriendCount;
+    String currency;
     Button btnAddFriend;
     DBHelper DB;
     String username;
     ListView listView;
     FriendAdapter adapter;
-    List<FriendItem> friends;
+    List<FriendItem> friendList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +40,37 @@ public class ManageFriendsActivity extends AppCompatActivity {
 
         btnAddFriend = findViewById(R.id.btn_add_friend);
         etFriendName = findViewById(R.id.et_friend_name);
+        tvManageFriendCount = findViewById(R.id.tv_manage_friend_count);
+
         DB = ((MyApplication) getApplication()).getDB();
         username = ((MyApplication) getApplication()).getUser().getUsername();
 
-        friends = new ArrayList<>();
+        friendList = new ArrayList<>();
 
-        // Todo: Get Friends and their Corresponding Debt
+        SharedPreferences sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+        currency = sharedPref.getString(getString(R.string.text_currency), "HKD");
+        String[] friends = DB.getFriends(username);
+        tvManageFriendCount.setText(String.valueOf(friends.length));
+        Bill[] bills = DB.getBills();
+        for (String friendName : friends) {
+            Double netDebt = 0.0;
+            for (int i = 0; i < bills.length; ++i) {
+                netDebt += bills[i].getDebtBetween(username, friendName);
+            }
 
-        friends.add(new FriendItem("Alice", "Owe me HKD 100"));
-        friends.add(new FriendItem("Bob", "Owe me HKD 200"));
-        friends.add(new FriendItem("Charlie", "Owe me HKD 10"));
-        friends.add(new FriendItem("Dave", "Owe me HKD 10000"));
+            String debtText = "";
+            if (netDebt < 0.0) {
+                debtText = "Lent me ";
+            } else if (netDebt > 0.0) {
+                debtText = "Borrowed ";
+            } else {
+                debtText = "Settled ";
+            }
+            debtText += (currency + CurrencyConverter.hkdTo(currency, Math.abs(netDebt))).toString();
+            friendList.add(new FriendItem(friendName, debtText));
+        }
 
-        adapter = new FriendAdapter(this, friends);
+        adapter = new FriendAdapter(this, friendList);
         listView = findViewById(R.id.friend_list_view);
         listView.setAdapter(adapter);
 
@@ -69,9 +90,11 @@ public class ManageFriendsActivity extends AppCompatActivity {
                     etFriendName.setText("");
 
                     // Add the new friend to the list and update the adapter
-                    FriendItem newFriendItem = new FriendItem(newFriend, "No debts");
-                    friends.add(newFriendItem);
+                    FriendItem newFriendItem = new FriendItem(newFriend, "Settled " + currency + "0.0");
+                    ManageFriendsActivity.this.friendList.add(newFriendItem);
                     adapter.notifyDataSetChanged();
+
+                    ((TextView) findViewById(R.id.tv_manage_friend_count)).setText(String.valueOf(DB.getFriends(username).length));
                     Toast.makeText(getApplicationContext(), newFriend + " is added. ", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "Friend " + newFriend + " doesn't exist. ", Toast.LENGTH_SHORT).show();

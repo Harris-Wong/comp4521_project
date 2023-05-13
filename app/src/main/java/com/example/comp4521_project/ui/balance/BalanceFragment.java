@@ -66,6 +66,7 @@ public class BalanceFragment extends Fragment {
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
 
         List<BillItem> items = new ArrayList<BillItem>();
+        // TODO: Add bill items
         items.add(new BillItem("McDonald's", "For You", "Split Evenly", "HKD 200", "Paid by You", "1d ago"));
         items.add(new BillItem("KFC", "For Her", "Split Individually", "HKD 100", "Paid by He, You", "2d ago"));
 
