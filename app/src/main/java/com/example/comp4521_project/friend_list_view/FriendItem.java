@@ -2,12 +2,12 @@ package com.example.comp4521_project.friend_list_view;
 
 public class FriendItem {
 
-    String friendName;
-    String oweMe;
+    private String friendName;
+    private String text;
 
-    public FriendItem(String friendName, String oweMe) {
+    public FriendItem(String friendName, String text) {
         this.friendName = friendName;
-        this.oweMe = oweMe;
+        this.text = text;
     }
 
     public String getFriendName() {
@@ -18,11 +18,11 @@ public class FriendItem {
         this.friendName = friendName;
     }
 
-    public String getOweMe() {
-        return oweMe;
+    public String getText() {
+        return text;
     }
 
-    public void setOweMe(String oweMe) {
-        this.oweMe = oweMe;
+    public void setText(String text) {
+        this.text = text;
     }
 }

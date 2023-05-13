@@ -34,7 +34,7 @@ public class FriendAdapter extends ArrayAdapter<FriendItem> {
         nameTextView.setText(currentFriend.getFriendName());
 
         TextView hobbyTextView = listItemView.findViewById(R.id.tv_owe_me);
-        hobbyTextView.setText(currentFriend.getOweMe());
+        hobbyTextView.setText(currentFriend.getText());
 
         return listItemView;
     }
