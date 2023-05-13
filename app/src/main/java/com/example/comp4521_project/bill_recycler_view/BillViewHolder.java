@@ -1,4 +1,4 @@
-package com.example.comp4521_project;
+package com.example.comp4521_project.bill_recycler_view;
 
 import android.view.View;
 import android.widget.TextView;
@@ -6,11 +6,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MyViewHolder extends RecyclerView.ViewHolder {
+import com.example.comp4521_project.R;
+
+public class BillViewHolder extends RecyclerView.ViewHolder {
 
     TextView title, people, splitMode, total, paidBy, howLongAgo;
 
-    public MyViewHolder(@NonNull View itemView) {
+    public BillViewHolder(@NonNull View itemView) {
         super(itemView);
         title = itemView.findViewById(R.id.tv_title);
         people = itemView.findViewById(R.id.tv_people);

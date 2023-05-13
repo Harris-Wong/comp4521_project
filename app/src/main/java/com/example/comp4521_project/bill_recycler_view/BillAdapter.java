@@ -1,4 +1,4 @@
-package com.example.comp4521_project;
+package com.example.comp4521_project.bill_recycler_view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,26 +7,28 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.comp4521_project.R;
+
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
+public class BillAdapter extends RecyclerView.Adapter<BillViewHolder> {
 
     Context context;
-    List<Item> items;
+    List<BillItem> items;
 
-    public MyAdapter(Context context, List<Item> items) {
+    public BillAdapter(Context context, List<BillItem> items) {
         this.context = context;
         this.items = items;
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_view, parent, false));
+    public BillViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new BillViewHolder(LayoutInflater.from(context).inflate(R.layout.bill_item_view, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BillViewHolder holder, int position) {
         holder.title.setText(items.get(position).getTitle());
         holder.people.setText(items.get(position).getPeople());
         holder.splitMode.setText(items.get(position).getSplitMode());

@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="McDonald's"
-            android:textSize="20sp"
+            android:textSize="14sp"
             android:textColor="@color/black"
             android:textStyle="bold" />
 
@@ -52,8 +52,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="HKD 106"
-            android:textSize="20sp"
-            android:textColor="@color/black" />
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_paid_by"

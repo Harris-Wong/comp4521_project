@@ -16,6 +16,7 @@
             android:name=".AddBillActivity"
             android:exported="false"
             android:label="@string/title_activity_add_bill"
+            android:windowSoftInputMode="adjustPan"
             android:parentActivityName=".HomeActivity"/>
         <activity
             android:name=".ManageFriendsActivity"
@@ -41,9 +42,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
     </application>
 
 </manifest>

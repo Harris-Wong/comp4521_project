@@ -7,104 +7,28 @@
     android:layout_marginTop="50dp"
     android:layout_marginLeft="30dp"
     android:layout_marginRight="30dp"
+    android:layout_marginBottom="20dp"
     tools:context=".AddBillActivity" >
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Title"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/et_title"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginBottom="20dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:singleLine="true"
-        android:textColor="#000000"
-        android:textSize="14sp"
-        android:background="@color/gray"
-        android:layout_below="@+id/tv_title" />
-
-    <TextView
-        android:id="@+id/tv_split_mode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Split Mode"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_below="@+id/et_title" />
-
     <LinearLayout
-        android:id="@+id/ll_split_mode"
+        android:id="@+id/ll_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="20sp"
-        android:layout_below="@+id/tv_split_mode" >
-
-        <ToggleButton
-            android:id="@+id/tb_evenly"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Evenly"
-            android:textOff="Evenly"
-            android:textOn="Evenly"
-            android:textSize="14sp"
-            android:background="@drawable/active_toggle_button_background_with_border"
-            android:checked="true" />
-
-        <ToggleButton
-            android:id="@+id/tb_individually"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Individually"
-            android:textOff="Individually"
-            android:textOn="Individually"
-            android:textSize="14sp"
-            android:background="@color/gray"
-            android:checked="false" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_total"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_below="@+id/ll_split_mode" />
-
-    <LinearLayout
-        android:id="@+id/ll_total"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="20sp"
-        android:layout_below="@+id/tv_total" >
+        android:layout_marginBottom="20sp" >
 
         <TextView
-            android:id="@+id/tv_currency"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_title"
+            android:layout_width="100dp"
             android:layout_height="40dp"
             android:layout_marginRight="20dp"
-            android:gravity="center_vertical"
+            android:text="Title"
+            android:textColor="#000000"
             android:textSize="20sp"
-            android:textColor="@color/black"
-            android:text="HKD^" />
+            android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/et_total"
+            android:id="@+id/et_title"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:paddingLeft="5dp"
@@ -116,7 +40,210 @@
 
     </LinearLayout>
 
-<!--    Todo: <Layout> Involved People-->
+    <LinearLayout
+        android:id="@+id/ll_currency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20sp"
+        android:layout_below="@+id/ll_title">
+
+        <TextView
+            android:id="@+id/tv_currency"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:text="Currency"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/et_currency"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:background="@color/gray"
+            android:layout_below="@+id/tv_title" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_total"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20sp"
+        android:layout_below="@+id/ll_currency" >
+
+        <TextView
+            android:id="@+id/tv_total"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center_vertical"
+            android:text="Total"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/et_total"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:inputType="numberDecimal"
+            android:background="@color/gray" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_paid_by"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20sp"
+        android:layout_below="@+id/ll_total" >
+
+        <TextView
+            android:id="@+id/tv_paid_by"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center_vertical"
+            android:text="Paid By"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/et_paid_by"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:text="Me"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:enabled="false"
+            android:background="@android:color/transparent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_split_mode1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20sp"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/ll_paid_by" >
+
+
+        <TextView
+            android:id="@+id/tv_split_mode"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Split Mode"
+            android:layout_marginRight="20dp"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_below="@+id/ll_paid_by" />
+
+        <LinearLayout
+            android:id="@+id/ll_split_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/tv_split_mode" >
+
+            <ToggleButton
+                android:id="@+id/tb_evenly"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Evenly"
+                android:textOff="Evenly"
+                android:textOn="Evenly"
+                android:textSize="14sp"
+                android:background="@drawable/active_toggle_button_background_with_border"
+                android:checked="true" />
+
+            <ToggleButton
+                android:id="@+id/tb_individually"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Individually"
+                android:textOff="Individually"
+                android:textOn="Individually"
+                android:textSize="14sp"
+                android:background="@color/gray"
+                android:checked="false" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_debts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/ll_split_mode1" >
+
+        <TextView
+            android:id="@+id/tv_debts"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:text="Debts"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/dp_friend_selection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@android:drawable/editbox_background"
+            android:drawableRight="@android:drawable/arrow_down_float"
+            android:drawablePadding="16dp"
+            android:hint="Select Friends"
+            android:textStyle="bold"
+            android:padding="12dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_friend_selection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_debts">
+
+        <ListView
+            android:id="@+id/friend_selection_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scrollbars="vertical" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_create_bill"
@@ -125,7 +252,6 @@
         android:text="Create"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
-        android:layout_marginTop="150dp"
         android:backgroundTint="#00A86B"
-        android:layout_below="@+id/ll_total" />
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

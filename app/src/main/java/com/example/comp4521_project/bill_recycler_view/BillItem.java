@@ -1,6 +1,6 @@
-package com.example.comp4521_project;
+package com.example.comp4521_project.bill_recycler_view;
 
-public class Item {
+public class BillItem {
 
     String title;
     String people;
@@ -9,7 +9,7 @@ public class Item {
     String paidBy;
     String howLongAgo;
 
-    public Item(String title, String people, String splitMode, String total, String paidBy, String howLongAgo) {
+    public BillItem(String title, String people, String splitMode, String total, String paidBy, String howLongAgo) {
         this.title = title;
         this.people = people;
         this.splitMode = splitMode;

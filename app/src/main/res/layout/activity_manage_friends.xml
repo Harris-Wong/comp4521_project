@@ -66,7 +66,10 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-    <!--    Todo: <Recycler View> Show Friends' List-->
+        <ListView
+            android:id="@+id/friend_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </RelativeLayout>
