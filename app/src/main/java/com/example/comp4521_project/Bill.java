@@ -1,5 +1,7 @@
 package com.example.comp4521_project;
 
+import com.google.gson.Gson;
+
 import java.time.Instant;
 import java.util.HashMap;
 
@@ -18,7 +20,18 @@ public class Bill {
         paidBy = "";
         mode = Mode.EVENLY;
         createInstant = Instant.now();
-        debt = new HashMap<String, Double>()
+        debt = new HashMap<String, Double>();
+    }
+
+    public Bill(String json) {
+        Gson gson = new Gson();
+        Bill bill = gson.fromJson(json, Bill.class);
+        this.title = bill.title;
+        this.total = bill.total;
+        this.paidBy = bill.paidBy;
+        this.mode = bill.mode;
+        this.createInstant = bill.createInstant;
+        this.debt = bill.debt;
     }
 
     public String getTitle() {
@@ -64,6 +77,11 @@ public class Bill {
             }
         }
         return 0.0;
+    }
+
+    public String toJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }
 

@@ -12,13 +12,21 @@ public class CurrencyConverter {
         exchangeRates.put("HKD", 1.0);
     }
 
-    public static Double toHKD(String currency, Double amount) {
+    public static Double toHKD(String currency, Double amountInCurrency) {
         Double exchangeRate = exchangeRates.getOrDefault(currency, null);
 
-        if (exchangeRate == null || amount == null) {
+        if (exchangeRate == null || amountInCurrency == null) {
             return null;
         }
 
-        return amount * exchangeRate;
+        return amountInCurrency / exchangeRate;
+    }
+
+    public static Double hkdTo(String currency, Double amountInHKD) {
+        Double exchangeRate = exchangeRates.getOrDefault(currency, null);
+        if (exchangeRate == null || amountInHKD == null) {
+            return null;
+        }
+        return amountInHKD * exchangeRate;
     }
 }
