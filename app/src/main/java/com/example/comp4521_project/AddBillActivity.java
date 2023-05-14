@@ -236,6 +236,11 @@ public class AddBillActivity extends AppCompatActivity {
         btnCreateBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (etTitle.getText().toString().length() == 0 || etTotal.getText().toString().length() == 0) {
+                    Toast.makeText(getApplicationContext(), "Fill in bill title and total before create. ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 List<String[]> debts = new ArrayList<>();
                 Log.d("log", splitMode.toString());
 
@@ -246,8 +251,6 @@ public class AddBillActivity extends AppCompatActivity {
                     debts.add(new String[]{friendName, debt});
                 }
                 Log.d("log", Arrays.deepToString(debts.toArray()));
-
-                // TODO
 
                 Bill newBill = new Bill();
                 newBill.setTitle(etTitle.getText().toString());
@@ -282,10 +285,7 @@ public class AddBillActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Failed to create the bill. ", Toast.LENGTH_SHORT).show();
                 }
 
-
-                // Print success message and Back to Home Activity
-
-//                finish();
+                finish();
             }
         });
     }
