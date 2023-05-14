@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,23 @@ public class BalanceFragment extends Fragment {
     DBHelper DB;
     String username;
     Currency currency;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("log", "on resume");
+        Bill[] bills = DB.getBills();
+        Double lentHKD = 0.0;
+        Double borrowedHKD = 0.0;
+        String[] friends = DB.getFriends(username);
+        for (int i = 0; i < bills.length; ++i) {
+            Bill thisBill = bills[i];
+            lentHKD += thisBill.getLent(username);
+            borrowedHKD += thisBill.getBorrowed(username);
+        }
+        tvTextYouLent.setText("You lent " + currency.toString() + String.format("%.2f", CurrencyConverter.hkdTo(currency, lentHKD)));
+        tvTextYouBorrowed.setText("You borrowed " + currency.toString() + String.format("%.2f", CurrencyConverter.hkdTo(currency, borrowedHKD)));
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentBalanceBinding.inflate(inflater, container, false);

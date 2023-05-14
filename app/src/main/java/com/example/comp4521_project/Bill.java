@@ -115,7 +115,7 @@ public class Bill {
             for (String name : debts.keySet()) {
                 if (!name.equals(currentUsername)) {
                     lent += debts.get(name);
-                    Log.d("log", "name " + name + " username " + currentUsername + " debt " + debts.get(name));
+//                    Log.d("log", "name " + name + " username " + currentUsername + " debt " + debts.get(name));
                 }
             }
         }
