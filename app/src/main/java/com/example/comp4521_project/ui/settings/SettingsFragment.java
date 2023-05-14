@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.comp4521_project.Currency;
 import com.example.comp4521_project.MyApplication;
 import com.example.comp4521_project.R;
 import com.example.comp4521_project.databinding.FragmentSettingsBinding;
@@ -35,25 +36,24 @@ public class SettingsFragment extends Fragment {
         getActivity().setTitle(title);
 
         Spinner spinner = (Spinner) getView().findViewById(R.id.currencySpinner);
-        System.out.println(spinner == null ? "Is null" : "not null");
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.currencies_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
+        spinner.setSelection(0);
         SharedPreferences sharedPref = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
-        String currentCurrency = sharedPref.getString(getString(R.string.text_currency), "HKD");
+        Currency currentCurrency = Currency.valueOf(sharedPref.getString(getString(R.string.text_currency), Currency.HKD.toString()));
         switch (currentCurrency) {
-            case "HKD":
+            case HKD:
                 spinner.setSelection(0);
                 break;
-            case "USD":
+            case USD:
                 spinner.setSelection(1);
                 break;
-            case "JPY":
+            case JPY:
                 spinner.setSelection(2);
                 break;
-            case "CNY":
+            case CNY:
                 spinner.setSelection(3);
                 break;
         }

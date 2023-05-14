@@ -41,44 +41,13 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ll_currency"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="20sp"
-        android:layout_below="@+id/ll_title">
-
-        <TextView
-            android:id="@+id/tv_currency"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="20dp"
-            android:text="Currency"
-            android:textColor="#000000"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/et_currency"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:singleLine="true"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:background="@color/gray"
-            android:layout_below="@+id/tv_title" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/ll_total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="20sp"
-        android:layout_below="@+id/ll_currency" >
+        android:layout_below="@+id/ll_currency"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="30sp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_total"
@@ -87,21 +56,27 @@
             android:layout_marginRight="20dp"
             android:gravity="center_vertical"
             android:text="Total"
-            android:textSize="20sp"
             android:textColor="@color/black"
+            android:textSize="20sp"
             android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/sn_add_bill_currency"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
         <EditText
             android:id="@+id/et_total"
-            android:layout_width="match_parent"
+            android:layout_width="100dp"
             android:layout_height="40dp"
+            android:background="@color/gray"
+            android:inputType="numberDecimal"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:singleLine="true"
             android:textColor="#000000"
-            android:textSize="14sp"
-            android:inputType="numberDecimal"
-            android:background="@color/gray" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -240,7 +215,7 @@
         <ListView
             android:id="@+id/friend_selection_view"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="250dp"
             android:scrollbars="vertical" />
 
     </LinearLayout>
@@ -248,10 +223,12 @@
     <Button
         android:id="@+id/btn_create_bill"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ll_friend_selection"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#00A86B"
         android:text="Create"
         android:textColor="#FFFFFF"
-        android:textSize="14sp"
-        android:backgroundTint="#00A86B"
-        android:layout_alignParentBottom="true"/>
+        android:textSize="14sp" />
 </RelativeLayout>

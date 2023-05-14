@@ -7,10 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -87,7 +89,9 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList<Bill> billsList = new ArrayList<>();
         while (cursor.moveToNext()) {
             String json = cursor.getString(cursor.getColumnIndexOrThrow("data"));
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantAdapter())
+                    .create();
             Bill bill = gson.fromJson(json, Bill.class);
             billsList.add(bill);
         }
@@ -102,7 +106,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("data", data);
-        long result = sqLiteDatabase.insert("users", null, contentValues);
+        long result = sqLiteDatabase.insert("bills", null, contentValues);
         return result != -1;
     }
 

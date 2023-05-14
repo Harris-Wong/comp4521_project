@@ -3,6 +3,7 @@ package com.example.comp4521_project;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +26,7 @@ public class ManageFriendsActivity extends AppCompatActivity {
 
     EditText etFriendName;
     TextView tvManageFriendCount;
-    String currency;
+    Currency currency;
     Button btnAddFriend;
     DBHelper DB;
     String username;
@@ -48,7 +49,7 @@ public class ManageFriendsActivity extends AppCompatActivity {
         friendList = new ArrayList<>();
 
         SharedPreferences sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
-        currency = sharedPref.getString(getString(R.string.text_currency), "HKD");
+        currency = Currency.valueOf(sharedPref.getString(getString(R.string.text_currency), Currency.HKD.toString()));
         String[] friends = DB.getFriends(username);
         tvManageFriendCount.setText(String.valueOf(friends.length));
         Bill[] bills = DB.getBills();
@@ -66,7 +67,7 @@ public class ManageFriendsActivity extends AppCompatActivity {
             } else {
                 debtText = "Settled ";
             }
-            debtText += (currency + CurrencyConverter.hkdTo(currency, Math.abs(netDebt))).toString();
+            debtText += currency.toString() + String.format("%.2f", CurrencyConverter.hkdTo(currency, Math.abs(netDebt)));
             friendList.add(new FriendItem(friendName, debtText));
         }
 

@@ -1,75 +1,125 @@
 package com.example.comp4521_project;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.comp4521_project.friend_list_view.FriendAdapter;
-import com.example.comp4521_project.friend_list_view.FriendItem;
 import com.example.comp4521_project.friend_selection_view.FriendSelectionAdapter;
 import com.example.comp4521_project.friend_selection_view.FriendSelectionItem;
 
+import java.text.DecimalFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class AddBillActivity extends AppCompatActivity {
 
     EditText etTitle, etTotal;
+    Spinner snAddBillCurrency;
+    Mode splitMode = Mode.EVENLY;
+    Currency currency = Currency.HKD;
+
     Button btnCreateBill;
+
     ToggleButton tbEvenly, tbIndividually;
 
     TextView dpFriendSelection;
     boolean[] selectedFriend;
-    ArrayList<Integer> friendList = new ArrayList<>();
-    String[] friendArray = {"Java", "C++", "Kotlin", "C", "Python", "Javascript"};
+    ArrayList<Integer> friendBuffer = new ArrayList<>();
+    String[] friendOptions = new String[0];
+    List<String> listViewItems;
 
     ListView listView;
-    FriendSelectionAdapter adapter;
+    FriendSelectionAdapter friendSelectionAdapter;
 
+    MyApplication myApplication;
+    String username;
+    DBHelper DB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_bill);
 
+        myApplication = (MyApplication) getApplication();
+        username = myApplication.getUser().getUsername();
+        DB = myApplication.getDB();
+
+        friendOptions = DB.getFriends(username);
+
+        snAddBillCurrency = (Spinner) findViewById(R.id.sn_add_bill_currency);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.currencies_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        snAddBillCurrency.setAdapter(adapter);
+        snAddBillCurrency.setSelection(0);
+        SharedPreferences sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+        currency = Currency.valueOf(sharedPref.getString(getString(R.string.text_currency), Currency.HKD.toString()));
+        switch (currency) {
+            case HKD:
+                snAddBillCurrency.setSelection(0);
+                break;
+            case USD:
+                snAddBillCurrency.setSelection(1);
+                break;
+            case JPY:
+                snAddBillCurrency.setSelection(2);
+                break;
+            case CNY:
+                snAddBillCurrency.setSelection(3);
+                break;
+        }
+        snAddBillCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String newValue = (String) parent.getItemAtPosition(position);
+                currency = Currency.valueOf(newValue);
+                Log.d("log", "Currency: " + currency);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         btnCreateBill = (Button) findViewById(R.id.btn_create_bill);
         tbEvenly = (ToggleButton) findViewById(R.id.tb_evenly);
         tbIndividually = (ToggleButton) findViewById(R.id.tb_individually);
+        etTitle = (EditText) findViewById(R.id.et_title);
+        etTotal = (EditText) findViewById(R.id.et_total);
 
-//        List<String> items = Arrays.asList("Item 1", "Item 2", "Item 3", "Item 4", "Item 5");
-        List<String> items = new ArrayList<>();
+        listViewItems = new ArrayList<>();
+        listViewItems.add(username);
 
-        adapter = new FriendSelectionAdapter(this, items);
+        friendSelectionAdapter = new FriendSelectionAdapter(this, listViewItems);
         listView = findViewById(R.id.friend_selection_view);
-        listView.setAdapter(adapter);
+        listView.setAdapter(friendSelectionAdapter);
 
         tbEvenly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    splitMode = Mode.EVENLY;
                     buttonView.setBackgroundResource(R.drawable.active_toggle_button_background_with_border);
                     tbIndividually.setChecked(false);
                     tbIndividually.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.gray)));
@@ -81,6 +131,7 @@ public class AddBillActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    splitMode = Mode.INDIVIDUALLY;
                     buttonView.setBackgroundResource(R.drawable.active_toggle_button_background_with_border);
                     tbEvenly.setChecked(false);
                     tbEvenly.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.gray)));
@@ -90,29 +141,28 @@ public class AddBillActivity extends AppCompatActivity {
 
         dpFriendSelection = findViewById(R.id.dp_friend_selection);
         // initialize selected friend array
-        selectedFriend = new boolean[friendArray.length];
+        selectedFriend = new boolean[friendOptions.length];
         dpFriendSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(AddBillActivity.this);
-                builder.setTitle("Select Friends");
+                builder.setTitle("This bill is for...");
                 builder.setCancelable(false);
 
-                builder.setMultiChoiceItems(friendArray, selectedFriend, new DialogInterface.OnMultiChoiceClickListener() {
+                builder.setMultiChoiceItems(friendOptions, selectedFriend, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int pos, boolean checked) {
                         // check condition
                         if (checked) {
                             // when checkbox selected
                             // Add position  in friend list
-                            friendList.add(pos);
+                            friendBuffer.add(pos);
                             // Sort array list
-                            Collections.sort(friendList);
+                            Collections.sort(friendBuffer);
                         } else {
                             // when checkbox unselected
                             // Remove position from friendList
-                            friendList.remove(Integer.valueOf(pos));
+                            friendBuffer.remove(Integer.valueOf(pos));
                         }
                     }
                 });
@@ -121,17 +171,21 @@ public class AddBillActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         try {
-                            items.clear();
+                            for (String s : listViewItems) {
+                                if (!s.startsWith(username)) {
+                                    listViewItems.remove(s);
+                                }
+                            }
 
                             StringBuilder stringBuilder = new StringBuilder();
 
-                            for (int j = 0; j < friendList.size(); j++) {
+                            for (int j = 0; j < friendBuffer.size(); j++) {
                                 // concat array value
-                                stringBuilder.append(friendArray[friendList.get(j)]);
-                                items.add(friendArray[friendList.get(j)]);
+                                stringBuilder.append(friendOptions[friendBuffer.get(j)]);
+                                listViewItems.add(friendOptions[friendBuffer.get(j)]);
 
                                 // check condition
-                                if (j != friendList.size() - 1) {
+                                if (j != friendBuffer.size() - 1) {
                                     // When j value  not equal
                                     // to friend list size - 1
                                     // add comma
@@ -141,7 +195,7 @@ public class AddBillActivity extends AppCompatActivity {
                             // set text on textView
 //                            dpFriendSelection.setText(stringBuilder.toString());
 
-                            adapter.notifyDataSetChanged();
+                            friendSelectionAdapter.notifyDataSetChanged();
 
                         } catch (Exception e) {
                             Log.e("AddBillActivity", "Error in onClick(): " + e.getMessage());
@@ -155,6 +209,7 @@ public class AddBillActivity extends AppCompatActivity {
                         dialogInterface.dismiss();
                     }
                 });
+                /*
                 builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -163,15 +218,16 @@ public class AddBillActivity extends AppCompatActivity {
                             // remove all selection
                             selectedFriend[j] = false;
                             // clear language list
-                            friendList.clear();
+                            forList.clear();
                             // clear text view value
                             dpFriendSelection.setText("");
                         }
 
                         items.clear();
-                        adapter.notifyDataSetChanged();
+                        friendSelectionAdapter.notifyDataSetChanged();
                     }
                 });
+                */
                 // show dialog
                 builder.show();
             }
@@ -180,25 +236,59 @@ public class AddBillActivity extends AppCompatActivity {
         btnCreateBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Todo: Check whether all view is filled + Add Bill info to Bill Table in database
+                List<String[]> debts = new ArrayList<>();
+                Log.d("log", splitMode.toString());
 
-                String splitMode = tbEvenly.isChecked() ? "Evenly" : "Individually";
-
-                List<String[]> friendInfolist = new ArrayList<>();
-
-                List<FriendSelectionItem> friendSelectionItems = adapter.getFriendSelectionItems();
+                List<FriendSelectionItem> friendSelectionItems = friendSelectionAdapter.getFriendSelectionItems();
                 for (FriendSelectionItem friendSelectionItem : friendSelectionItems) {
-                    String friend = friendSelectionItem.getFriend();
+                    String friendName = friendSelectionItem.getFriend();
                     String debt = friendSelectionItem.getDebt();
-                    friendInfolist.add(new String[]{friend, debt});
+                    debts.add(new String[]{friendName, debt});
                 }
-                Log.i("Add Bill", Arrays.deepToString(friendInfolist.toArray()));
+                Log.d("log", Arrays.deepToString(debts.toArray()));
+
+                // TODO
+
+                Bill newBill = new Bill();
+                newBill.setTitle(etTitle.getText().toString());
+                newBill.setTotalFrom(currency, Double.valueOf(String.format("%.2f", Double.valueOf(etTotal.getText().toString()))));
+                newBill.setPaidBy(username);
+                newBill.setMode(splitMode);
+                newBill.setCreateInstant(Instant.now());
+                HashMap<String, Double> debtsFinal = new HashMap<>();
+                if (splitMode.equals(Mode.EVENLY)) {
+                    for (String[] debt : debts) {
+                        debtsFinal.put(debt[0], CurrencyConverter.toHKD(currency, Double.valueOf(etTotal.getText().toString()) / debts.size()));
+                    }
+                } else {
+                    Double count = 0.0;
+                    for (String[] debt : debts) {
+                        Double temp = Double.valueOf(debt[1].trim());
+                        count += temp;
+                        debtsFinal.put(debt[0], CurrencyConverter.toHKD(currency, temp));
+                    }
+                    Double totalHKD = CurrencyConverter.toHKD(currency, Double.valueOf(etTotal.getText().toString()));
+                    if (!totalHKD.equals(count)) {
+                        Toast.makeText(getApplicationContext(), "All debts must add up to total. ", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
+                newBill.setDebts(debtsFinal);
+                Log.d("log", "bill to insert " + newBill.toJson());
+                if (DB.insertBill(newBill.toJson())) {
+                    Toast.makeText(getApplicationContext(), "Bill created successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Failed to create the bill. ", Toast.LENGTH_SHORT).show();
+                }
 
 
                 // Print success message and Back to Home Activity
-                Toast.makeText(getApplicationContext(), "Bill successfully created", Toast.LENGTH_SHORT).show();
-                finish();
+
+//                finish();
             }
         });
     }
 }
+
+// [[a, 12], [b, 13], [c, 14]] List<String[]>
