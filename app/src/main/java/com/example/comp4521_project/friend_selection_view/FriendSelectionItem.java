@@ -13,16 +13,16 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 public class FriendSelectionItem {
-    private String friend;
+    private String friendName;
     private String debt;
 
     public FriendSelectionItem(String friend, String debt) {
-        this.friend = friend;
+        this.friendName = friend;
         this.debt = debt;
     }
 
     public String getFriend() {
-        return friend;
+        return friendName;
     }
 
     public String getDebt() {

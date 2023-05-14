@@ -1,6 +1,9 @@
 package com.example.comp4521_project.friend_selection_view;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +16,17 @@ import androidx.annotation.NonNull;
 import com.example.comp4521_project.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class FriendSelectionAdapter extends ArrayAdapter<String> {
 
-    private List<String> items;
+    private List<String> friendItems;
+    private HashMap<String, String> friendDebt;
 
-    public FriendSelectionAdapter(Context context, List<String> items) {
-        super(context, 0, items);
-        this.items = items;
+    public FriendSelectionAdapter(Context context, List<String> friendItems) {
+        super(context, 0, friendItems);
+        this.friendItems = friendItems;
     }
 
     @NonNull
@@ -32,6 +37,7 @@ public class FriendSelectionAdapter extends ArrayAdapter<String> {
             view = LayoutInflater.from(getContext()).inflate(R.layout.friend_selection_item, parent, false);
         }
 
+        friendDebt = new HashMap<>();
         TextView tvFriend = view.findViewById(R.id.tv_friend);
         EditText etDebt = view.findViewById(R.id.et_debt);
 
@@ -41,18 +47,42 @@ public class FriendSelectionAdapter extends ArrayAdapter<String> {
         // Set the tag of the EditText to the position so we can retrieve it later
         etDebt.setTag(position);
 
-        // Set an OnFocusChangeListener to the EditText to update the item in the list when the focus is lost
+        //   Set an OnFocusChangeListener to the EditText to update the item in the list when the focus is lost
         etDebt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                int position = (int) etDebt.getTag();
                 if (!hasFocus) {
-                    // Get the position of the EditText from the tag
-                    int position = (int) v.getTag();
-
-                    // Update the item in the list with the new debt value
                     String debt = etDebt.getText().toString();
-                    items.set(position, items.get(position) + " (" + debt + ")");
+                    if (debt != null && !debt.isEmpty()) {
+                        debt = debt.length() == 0 ? "0.0" : debt;
+                    }
+                    friendDebt.put(friendItems.get(position), debt);
                 }
+            }
+        });
+
+        etDebt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int position = (int) etDebt.getTag();
+
+                // Update the item in the list with the new debt value
+                String debt = s.toString();
+                if (debt != null && !debt.isEmpty()) {
+                    debt = debt.length() == 0 ? "0.0" : debt;
+                }
+                friendDebt.put(friendItems.get(position), debt);
             }
         });
 
@@ -61,11 +91,9 @@ public class FriendSelectionAdapter extends ArrayAdapter<String> {
 
     public List<FriendSelectionItem> getFriendSelectionItems() {
         List<FriendSelectionItem> friendSelectionItems = new ArrayList<>();
-        for (int i = 0; i < items.size(); i++) {
-            String friend = items.get(i);
-            EditText etDebt = (EditText) getView(i, null, null).findViewById(R.id.et_debt);
-            String debt = etDebt.getText().toString();
-            friendSelectionItems.add(new FriendSelectionItem(friend, debt));
+        for (int i = 0; i < friendItems.size(); i++) {
+            String friendName = friendItems.get(i);
+            friendSelectionItems.add(new FriendSelectionItem(friendName, friendDebt.getOrDefault(friendName, "0.0")));
         }
         return friendSelectionItems;
     }
