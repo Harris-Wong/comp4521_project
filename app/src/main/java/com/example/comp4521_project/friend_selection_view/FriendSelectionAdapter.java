@@ -27,6 +27,7 @@ public class FriendSelectionAdapter extends ArrayAdapter<String> {
     public FriendSelectionAdapter(Context context, List<String> friendItems) {
         super(context, 0, friendItems);
         this.friendItems = friendItems;
+        this.friendDebt = new HashMap<>();
     }
 
     @NonNull
@@ -37,7 +38,6 @@ public class FriendSelectionAdapter extends ArrayAdapter<String> {
             view = LayoutInflater.from(getContext()).inflate(R.layout.friend_selection_item, parent, false);
         }
 
-        friendDebt = new HashMap<>();
         TextView tvFriend = view.findViewById(R.id.tv_friend);
         EditText etDebt = view.findViewById(R.id.et_debt);
 
