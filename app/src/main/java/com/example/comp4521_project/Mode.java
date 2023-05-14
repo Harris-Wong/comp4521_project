@@ -4,3 +4,4 @@ public enum Mode {
     EVENLY,
     INDIVIDUALLY
 }
+

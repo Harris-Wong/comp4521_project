@@ -1,6 +1,7 @@
 package com.example.comp4521_project;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -13,7 +14,7 @@ public class Bill {
     private String paidBy;
     private Mode mode;
     private Instant createInstant;
-    private HashMap<String, Double> debt;
+    private HashMap<String, Double> debts;
 
     public Bill() {
         title = "";
@@ -21,59 +22,85 @@ public class Bill {
         paidBy = "";
         mode = Mode.EVENLY;
         createInstant = Instant.now();
-        debt = new HashMap<String, Double>();
+        debts = new HashMap<String, Double>();
     }
 
     public Bill(String json) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Instant.class, new InstantAdapter())
+                .create();
         Bill bill = gson.fromJson(json, Bill.class);
         this.title = bill.title;
         this.total = bill.total;
         this.paidBy = bill.paidBy;
         this.mode = bill.mode;
         this.createInstant = bill.createInstant;
-        this.debt = bill.debt;
+        this.debts = bill.debts;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public Double getTotal() {
-        return total;
+    public void setTitle(String newTitle) {
+        this.title = newTitle;
+    }
+
+    public Double getTotalIn(Currency currency) {
+        return CurrencyConverter.hkdTo(currency, this.total);
+    }
+
+    public void setTotalFrom(Currency currency, Double newTotal) {
+        this.total = CurrencyConverter.toHKD(currency, newTotal);
     }
 
     public String getPaidBy() {
         return paidBy;
     }
 
+    public void setPaidBy(String username) {
+        this.paidBy = username;
+    }
+
     public Mode getMode() {
         return mode;
+    }
+
+    public void setMode(Mode newMode) {
+        this.mode = newMode;
     }
 
     public Instant getCreateInstant() {
         return createInstant;
     }
 
-    public HashMap<String, Double> getDebt() {
-        return debt;
+    public void setCreateInstant(Instant newInstant) {
+        this.createInstant = newInstant;
+    }
+
+    public HashMap<String, Double> getDebts() {
+        return debts;
+    }
+
+    public void setDebts(HashMap<String, Double> newDebts) {
+        this.debts = newDebts;
     }
 
     public Double getDebtBetween(String currentUsername, String anotherUsername) {
         if (currentUsername.equals(anotherUsername)) {
             return 0.0;
         } else if (currentUsername.equals(paidBy)) {
-            for (String name : debt.keySet()) {
+            for (String name : debts.keySet()) {
                 if (currentUsername.equals(name))
                     continue;
                 if (anotherUsername.equals(name)) {
-                    return debt.get(name);
+                    return debts.get(name);
                 }
             }
         } else if (anotherUsername.equals(paidBy)) {
-            for (String name : debt.keySet()) {
+            for (String name : debts.keySet()) {
                 if (currentUsername.equals(name)) {
-                    return -1 * debt.get(name);
+                    return -1 * debts.get(name);
                 }
             }
         }
@@ -81,7 +108,7 @@ public class Bill {
     }
 
     public String[] getPeople() {
-        return debt.keySet().toArray(new String[debt.keySet().size()]);
+        return debts.keySet().toArray(new String[debts.keySet().size()]);
     }
 
     public String historyFrom(Instant now, Instant before) {
@@ -97,7 +124,9 @@ public class Bill {
     }
 
     public String toJson() {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Instant.class, new InstantAdapter())
+                .create();
         return gson.toJson(this);
     }
 }

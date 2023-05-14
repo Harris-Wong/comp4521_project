@@ -24,9 +24,12 @@ import android.widget.ToggleButton;
 import com.example.comp4521_project.friend_selection_view.FriendSelectionAdapter;
 import com.example.comp4521_project.friend_selection_view.FriendSelectionItem;
 
+import java.text.DecimalFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class AddBillActivity extends AppCompatActivity {
@@ -34,7 +37,7 @@ public class AddBillActivity extends AppCompatActivity {
     EditText etTitle, etTotal;
     Spinner snAddBillCurrency;
     Mode splitMode = Mode.EVENLY;
-    String currency = "HKD";
+    Currency currency = Currency.HKD;
 
     Button btnCreateBill;
 
@@ -70,18 +73,18 @@ public class AddBillActivity extends AppCompatActivity {
         snAddBillCurrency.setAdapter(adapter);
         snAddBillCurrency.setSelection(0);
         SharedPreferences sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
-        currency = sharedPref.getString(getString(R.string.text_currency), "HKD");
+        currency = Currency.valueOf(sharedPref.getString(getString(R.string.text_currency), Currency.HKD.toString()));
         switch (currency) {
-            case "HKD":
+            case HKD:
                 snAddBillCurrency.setSelection(0);
                 break;
-            case "USD":
+            case USD:
                 snAddBillCurrency.setSelection(1);
                 break;
-            case "JPY":
+            case JPY:
                 snAddBillCurrency.setSelection(2);
                 break;
-            case "CNY":
+            case CNY:
                 snAddBillCurrency.setSelection(3);
                 break;
         }
@@ -89,7 +92,7 @@ public class AddBillActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String newValue = (String) parent.getItemAtPosition(position);
-                currency = newValue;
+                currency = Currency.valueOf(newValue);
                 Log.d("log", "Currency: " + currency);
             }
 
@@ -102,6 +105,8 @@ public class AddBillActivity extends AppCompatActivity {
         btnCreateBill = (Button) findViewById(R.id.btn_create_bill);
         tbEvenly = (ToggleButton) findViewById(R.id.tb_evenly);
         tbIndividually = (ToggleButton) findViewById(R.id.tb_individually);
+        etTitle = (EditText) findViewById(R.id.et_title);
+        etTotal = (EditText) findViewById(R.id.et_total);
 
         listViewItems = new ArrayList<>();
         listViewItems.add(username);
@@ -141,7 +146,7 @@ public class AddBillActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(AddBillActivity.this);
-                builder.setTitle("The bill is for...");
+                builder.setTitle("This bill is for...");
                 builder.setCancelable(false);
 
                 builder.setMultiChoiceItems(friendOptions, selectedFriend, new DialogInterface.OnMultiChoiceClickListener() {
@@ -231,25 +236,59 @@ public class AddBillActivity extends AppCompatActivity {
         btnCreateBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Todo: Check whether all view is filled + Add Bill info to Bill Table in database
-
-                List<String[]> friendInfolist = new ArrayList<>();
+                List<String[]> debts = new ArrayList<>();
                 Log.d("log", splitMode.toString());
 
                 List<FriendSelectionItem> friendSelectionItems = friendSelectionAdapter.getFriendSelectionItems();
                 for (FriendSelectionItem friendSelectionItem : friendSelectionItems) {
                     String friendName = friendSelectionItem.getFriend();
                     String debt = friendSelectionItem.getDebt();
-                    friendInfolist.add(new String[]{friendName, debt});
-                    Log.d("log", "add friendInfoList " + friendName + " " + debt);
+                    debts.add(new String[]{friendName, debt});
                 }
-                Log.d("log", Arrays.deepToString(friendInfolist.toArray()));
+                Log.d("log", Arrays.deepToString(debts.toArray()));
+
+                // TODO
+
+                Bill newBill = new Bill();
+                newBill.setTitle(etTitle.getText().toString());
+                newBill.setTotalFrom(currency, Double.valueOf(String.format("%.2f", Double.valueOf(etTotal.getText().toString()))));
+                newBill.setPaidBy(username);
+                newBill.setMode(splitMode);
+                newBill.setCreateInstant(Instant.now());
+                HashMap<String, Double> debtsFinal = new HashMap<>();
+                if (splitMode.equals(Mode.EVENLY)) {
+                    for (String[] debt : debts) {
+                        debtsFinal.put(debt[0], CurrencyConverter.toHKD(currency, Double.valueOf(etTotal.getText().toString()) / debts.size()));
+                    }
+                } else {
+                    Double count = 0.0;
+                    for (String[] debt : debts) {
+                        Double temp = Double.valueOf(debt[1].trim());
+                        count += temp;
+                        debtsFinal.put(debt[0], CurrencyConverter.toHKD(currency, temp));
+                    }
+                    Double totalHKD = CurrencyConverter.toHKD(currency, Double.valueOf(etTotal.getText().toString()));
+                    if (!totalHKD.equals(count)) {
+                        Toast.makeText(getApplicationContext(), "All debts must add up to total. ", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
+                newBill.setDebts(debtsFinal);
+                Log.d("log", "bill to insert " + newBill.toJson());
+                if (DB.insertBill(newBill.toJson())) {
+                    Toast.makeText(getApplicationContext(), "Bill created successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Failed to create the bill. ", Toast.LENGTH_SHORT).show();
+                }
 
 
                 // Print success message and Back to Home Activity
-                Toast.makeText(getApplicationContext(), "Bill successfully created", Toast.LENGTH_SHORT).show();
+
 //                finish();
             }
         });
     }
 }
+
+// [[a, 12], [b, 13], [c, 14]] List<String[]>
