@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,6 @@ import com.example.comp4521_project.MyApplication;
 import com.example.comp4521_project.R;
 import com.example.comp4521_project.databinding.FragmentBalanceBinding;
 
-import java.text.DecimalFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,8 +38,9 @@ public class BalanceFragment extends Fragment {
     private FragmentBalanceBinding binding;
 
     Button btnManageFriends, btnAddBill;
-    TextView tv_friends_number;
-
+    TextView tvFriendsNumber;
+    TextView tvTextYouBorrowed;
+    TextView tvTextYouLent;
     MyApplication myApplication;
     DBHelper DB;
     String username;
@@ -61,8 +60,10 @@ public class BalanceFragment extends Fragment {
 
         btnManageFriends = (Button) root.findViewById(R.id.btn_manage_friends);
         btnAddBill = (Button) root.findViewById(R.id.btn_add_bill);
-        tv_friends_number = (TextView) root.findViewById(R.id.tv_friends_number);
-        tv_friends_number.setText(myApplication.getDB().countFriends(myApplication.getUser().getUsername()).toString());
+        tvFriendsNumber = (TextView) root.findViewById(R.id.tv_friends_number);
+        tvFriendsNumber.setText(myApplication.getDB().countFriends(myApplication.getUser().getUsername()).toString());
+        tvTextYouLent = (TextView) root.findViewById(R.id.tv_text_you_lent);
+        tvTextYouBorrowed = (TextView) root.findViewById(R.id.tv_text_you_borrowed);
         btnManageFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,6 +99,26 @@ public class BalanceFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new BillAdapter(getActivity().getApplicationContext(), billItems));
+
+        Double lentHKD = 0.0;
+        Double borrowedHKD = 0.0;
+        String[] friends = DB.getFriends(username);
+        Double temp;
+        for (String friend : friends) {
+            for (int i = 0; i < bills.length; ++i) {
+                Bill thisBill = bills[i];
+                temp = thisBill.getDebtBetween(username, friend);
+                if (temp >= 0) {
+                    lentHKD += Math.abs(temp);
+                } else {
+                    borrowedHKD += Math.abs(temp);
+                }
+                temp = 0.0;
+            }
+        }
+
+        tvTextYouLent.setText("You lent " + currency.toString() + String.format("%.2f", CurrencyConverter.hkdTo(currency, lentHKD)));
+        tvTextYouBorrowed.setText("You borrowed " + currency.toString() + String.format("%.2f", CurrencyConverter.hkdTo(currency, borrowedHKD)));
 
         return root;
     }

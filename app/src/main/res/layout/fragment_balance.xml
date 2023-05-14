@@ -79,12 +79,21 @@
                 android:text="Balance" />
 
             <TextView
-                android:id="@+id/tv_balance_sentence"
+                android:id="@+id/tv_text_you_lent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="You lent HKD $0"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_text_you_borrowed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:text="You borrowed HKD $0"
                 android:textColor="@color/black"
-                android:text="You are owned HKD $0" />
+                android:textSize="14sp" />
+
         </LinearLayout>
 
         <LinearLayout
