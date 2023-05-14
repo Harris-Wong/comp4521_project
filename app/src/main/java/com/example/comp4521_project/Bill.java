@@ -1,5 +1,7 @@
 package com.example.comp4521_project;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -105,6 +107,31 @@ public class Bill {
             }
         }
         return 0.0;
+    }
+
+    public Double getLent(String currentUsername) {
+        Double lent = 0.0;
+        if (paidBy.equals(currentUsername)) {
+            for (String name : debts.keySet()) {
+                if (!name.equals(currentUsername)) {
+                    lent += debts.get(name);
+                    Log.d("log", "name " + name + " username " + currentUsername + " debt " + debts.get(name));
+                }
+            }
+        }
+        return lent;
+    }
+
+    public Double getBorrowed(String currentUsername) {
+        Double borrowed = 0.0;
+        if (!paidBy.equals(currentUsername)) {
+            for (String name : debts.keySet()) {
+                if (name.equals(currentUsername)) {
+                    borrowed += debts.get(name);
+                }
+            }
+        }
+        return borrowed;
     }
 
     public String[] getPeople() {

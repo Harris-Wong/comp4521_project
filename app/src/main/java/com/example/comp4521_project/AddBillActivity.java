@@ -285,31 +285,13 @@ public class AddBillActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Failed to create the bill. ", Toast.LENGTH_SHORT).show();
                 }
 
-
-
-                Double lentHKD = 0.0;
-                Double borrowedHKD = 0.0;
-                Bill[] bills = DB.getBills();
-                String[] friends = DB.getFriends(username);
-                Double temp;
-                for (String friend : friends) {
-                    for (int i = 0; i < bills.length; ++i) {
-                        Bill thisBill = bills[i];
-                        temp = thisBill.getDebtBetween(username, friend);
-                        if (temp >= 0) {
-                            lentHKD += Math.abs(temp);
-                        } else {
-                            borrowedHKD += Math.abs(temp);
-                        }
-                        temp = 0.0;
+                etTitle.setText("");
+                etTotal.setText("");
+                for (String s : listViewItems) {
+                    if (!s.startsWith(username)) {
+                        listViewItems.remove(s);
                     }
                 }
-
-                ((TextView) findViewById(R.id.tv_text_you_lent)).setText("You lent " + currency.toString() + String.format("%.2f", CurrencyConverter.hkdTo(currency, lentHKD)));
-                ((TextView) findViewById(R.id.tv_text_you_borrowed)).setText("You borrowed " + currency.toString() + String.format("%.2f", CurrencyConverter.hkdTo(currency, borrowedHKD)));
-
-
-                finish();
             }
         });
     }

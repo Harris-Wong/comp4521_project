@@ -103,20 +103,11 @@ public class BalanceFragment extends Fragment {
         Double lentHKD = 0.0;
         Double borrowedHKD = 0.0;
         String[] friends = DB.getFriends(username);
-        Double temp;
-        for (String friend : friends) {
-            for (int i = 0; i < bills.length; ++i) {
-                Bill thisBill = bills[i];
-                temp = thisBill.getDebtBetween(username, friend);
-                if (temp >= 0) {
-                    lentHKD += Math.abs(temp);
-                } else {
-                    borrowedHKD += Math.abs(temp);
-                }
-                temp = 0.0;
-            }
+        for (int i = 0; i < bills.length; ++i) {
+            Bill thisBill = bills[i];
+            lentHKD += thisBill.getLent(username);
+            borrowedHKD += thisBill.getBorrowed(username);
         }
-
         tvTextYouLent.setText("You lent " + currency.toString() + String.format("%.2f", CurrencyConverter.hkdTo(currency, lentHKD)));
         tvTextYouBorrowed.setText("You borrowed " + currency.toString() + String.format("%.2f", CurrencyConverter.hkdTo(currency, borrowedHKD)));
 
