@@ -88,7 +88,7 @@ public class BalanceFragment extends Fragment {
         for (int i = 0; i < bills.length; ++i) {
             Bill thisBill = bills[i];
             String title = thisBill.getTitle();
-            String people = ("For " + String.join(", ", thisBill.getPeople())).replace(username, "You");
+            String people = ("For " + String.join(", ", thisBill.getPeople())).replaceFirst(username, "You");
             String mode = thisBill.getMode().equals(Mode.EVENLY) ? "Split evenly" : "Split individually";
             String total = currency + String.format("%.2f", thisBill.getTotalIn(currency));
             String paidBy = thisBill.getPaidBy().equals(username) ? "You" : thisBill.getPaidBy();
