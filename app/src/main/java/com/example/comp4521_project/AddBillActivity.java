@@ -1,32 +1,22 @@
 package com.example.comp4521_project;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.comp4521_project.friend_list_view.FriendAdapter;
-import com.example.comp4521_project.friend_list_view.FriendItem;
 import com.example.comp4521_project.friend_selection_view.FriendSelectionAdapter;
 import com.example.comp4521_project.friend_selection_view.FriendSelectionItem;
 
@@ -39,15 +29,16 @@ public class AddBillActivity extends AppCompatActivity {
 
     EditText etTitle, etTotal;
     Button btnCreateBill;
+    Spinner snAddBillCurrency;
     ToggleButton tbEvenly, tbIndividually;
 
     TextView dpFriendSelection;
     boolean[] selectedFriend;
-    ArrayList<Integer> friendList = new ArrayList<>();
-    String[] friendArray = {"Java", "C++", "Kotlin", "C", "Python", "Javascript"};
+    ArrayList<Integer> forList = new ArrayList<>();
+    String[] friendArray = new String[0];
 
     ListView listView;
-    FriendSelectionAdapter adapter;
+    FriendSelectionAdapter friendSelectionAdapter;
 
 
     @Override
@@ -58,13 +49,14 @@ public class AddBillActivity extends AppCompatActivity {
         btnCreateBill = (Button) findViewById(R.id.btn_create_bill);
         tbEvenly = (ToggleButton) findViewById(R.id.tb_evenly);
         tbIndividually = (ToggleButton) findViewById(R.id.tb_individually);
+        snAddBillCurrency = (Spinner) findViewById(R.id.sn_add_bill_currency);
 
 //        List<String> items = Arrays.asList("Item 1", "Item 2", "Item 3", "Item 4", "Item 5");
         List<String> items = new ArrayList<>();
 
-        adapter = new FriendSelectionAdapter(this, items);
+        friendSelectionAdapter = new FriendSelectionAdapter(this, items);
         listView = findViewById(R.id.friend_selection_view);
-        listView.setAdapter(adapter);
+        listView.setAdapter(friendSelectionAdapter);
 
         tbEvenly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -94,9 +86,8 @@ public class AddBillActivity extends AppCompatActivity {
         dpFriendSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(AddBillActivity.this);
-                builder.setTitle("Select Friends");
+                builder.setTitle("The bill is for...");
                 builder.setCancelable(false);
 
                 builder.setMultiChoiceItems(friendArray, selectedFriend, new DialogInterface.OnMultiChoiceClickListener() {
@@ -106,13 +97,13 @@ public class AddBillActivity extends AppCompatActivity {
                         if (checked) {
                             // when checkbox selected
                             // Add position  in friend list
-                            friendList.add(pos);
+                            forList.add(pos);
                             // Sort array list
-                            Collections.sort(friendList);
+                            Collections.sort(forList);
                         } else {
                             // when checkbox unselected
                             // Remove position from friendList
-                            friendList.remove(Integer.valueOf(pos));
+                            forList.remove(Integer.valueOf(pos));
                         }
                     }
                 });
@@ -125,13 +116,13 @@ public class AddBillActivity extends AppCompatActivity {
 
                             StringBuilder stringBuilder = new StringBuilder();
 
-                            for (int j = 0; j < friendList.size(); j++) {
+                            for (int j = 0; j < forList.size(); j++) {
                                 // concat array value
-                                stringBuilder.append(friendArray[friendList.get(j)]);
-                                items.add(friendArray[friendList.get(j)]);
+                                stringBuilder.append(friendArray[forList.get(j)]);
+                                items.add(friendArray[forList.get(j)]);
 
                                 // check condition
-                                if (j != friendList.size() - 1) {
+                                if (j != forList.size() - 1) {
                                     // When j value  not equal
                                     // to friend list size - 1
                                     // add comma
@@ -141,7 +132,7 @@ public class AddBillActivity extends AppCompatActivity {
                             // set text on textView
 //                            dpFriendSelection.setText(stringBuilder.toString());
 
-                            adapter.notifyDataSetChanged();
+                            friendSelectionAdapter.notifyDataSetChanged();
 
                         } catch (Exception e) {
                             Log.e("AddBillActivity", "Error in onClick(): " + e.getMessage());
@@ -155,6 +146,7 @@ public class AddBillActivity extends AppCompatActivity {
                         dialogInterface.dismiss();
                     }
                 });
+                /*
                 builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -163,15 +155,16 @@ public class AddBillActivity extends AppCompatActivity {
                             // remove all selection
                             selectedFriend[j] = false;
                             // clear language list
-                            friendList.clear();
+                            forList.clear();
                             // clear text view value
                             dpFriendSelection.setText("");
                         }
 
                         items.clear();
-                        adapter.notifyDataSetChanged();
+                        friendSelectionAdapter.notifyDataSetChanged();
                     }
                 });
+                */
                 // show dialog
                 builder.show();
             }
@@ -183,10 +176,10 @@ public class AddBillActivity extends AppCompatActivity {
 //                Todo: Check whether all view is filled + Add Bill info to Bill Table in database
 
                 String splitMode = tbEvenly.isChecked() ? "Evenly" : "Individually";
-
+                Log.d("log", splitMode);
                 List<String[]> friendInfolist = new ArrayList<>();
 
-                List<FriendSelectionItem> friendSelectionItems = adapter.getFriendSelectionItems();
+                List<FriendSelectionItem> friendSelectionItems = friendSelectionAdapter.getFriendSelectionItems();
                 for (FriendSelectionItem friendSelectionItem : friendSelectionItems) {
                     String friend = friendSelectionItem.getFriend();
                     String debt = friendSelectionItem.getDebt();
@@ -197,7 +190,7 @@ public class AddBillActivity extends AppCompatActivity {
 
                 // Print success message and Back to Home Activity
                 Toast.makeText(getApplicationContext(), "Bill successfully created", Toast.LENGTH_SHORT).show();
-                finish();
+//                finish();
             }
         });
     }
