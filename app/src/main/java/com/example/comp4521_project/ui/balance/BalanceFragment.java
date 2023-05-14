@@ -50,7 +50,7 @@ public class BalanceFragment extends Fragment {
         myApplication = (MyApplication) requireActivity().getApplication();
         DB = myApplication.getDB();
         username = myApplication.getUser().getUsername();
-        SharedPreferences sharedPref = getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE);
         currency = sharedPref.getString(getString(R.string.text_currency), "HKD");
 
         getActivity().setTitle("Balance");
