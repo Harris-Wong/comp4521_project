@@ -171,11 +171,8 @@ public class AddBillActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         try {
-                            for (String s : listViewItems) {
-                                if (!s.startsWith(username)) {
-                                    listViewItems.remove(s);
-                                }
-                            }
+                            listViewItems.clear();
+                            listViewItems.add(username);
 
                             StringBuilder stringBuilder = new StringBuilder();
 
@@ -287,11 +284,9 @@ public class AddBillActivity extends AppCompatActivity {
 
                 etTitle.setText("");
                 etTotal.setText("");
-                for (String s : listViewItems) {
-                    if (!s.startsWith(username)) {
-                        listViewItems.remove(s);
-                    }
-                }
+                listViewItems.clear();
+                listViewItems.add(username);
+                friendSelectionAdapter.notifyDataSetChanged();
             }
         });
     }
